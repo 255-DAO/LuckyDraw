@@ -64,6 +64,7 @@ pprint(ticket_pool[0:20])
 # Show addresses and prizes:
 cnt_dict = dict()
 for cur_prize in ticket_pool[0:20]:
+    print(str(reverse_ticket[cur_prize]) + ' : ' + str(cur_prize))
     if cnt_dict.get(reverse_ticket[cur_prize]) is None:
         cnt_dict[reverse_ticket[cur_prize]] = 0
     cnt_dict[reverse_ticket[cur_prize]] += 1
