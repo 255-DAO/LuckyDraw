@@ -1,0 +1,44 @@
+```{r}
+require(ggplot2)
+require(dplyr)
+require(magrittr)
+require(reshape2)
+require(Matrix)
+require(plotly)
+require(htmlwidgets)
+require(reshape2)
+require(stringr)
+require(foreach)
+require(doParallel)
+require(stringr)
+require(readr)
+
+getwd()
+```
+
+# Process results
+
+```{r}
+raffle_table <- read.csv('./MP_luckydraw.csv', colClasses = c("integer", "character"))
+raffle_table$index <- 1:nrow(raffle_table)
+```
+
+```{r}
+res_table <- raffle_table %>% group_by(wallet) %>% summarise(min_index = min(index)) %>% arrange(min_index)
+write.csv(res_table, "MP_luckydraw_results.csv")
+```
+
+# Insert contacts
+
+```{r}
+contact_tab <- read.csv('../../tables/luckydraw_signup_220529.csv', colClasses = "character")
+colnames(contact_tab) <- c("ts", "wallet", "tg", "dc", "wc")
+contact_tab$wallet <- str_to_lower(contact_tab$wallet)
+contact_tab <- as_tibble(contact_tab)
+```
+
+```{r}
+full_join(contact_tab, res_table) %>% arrange(min_index) %>% write.csv("MP_luckydraw_results_with_contacts.csv")
+
+
+```
